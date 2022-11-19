@@ -9,6 +9,9 @@ namespace Derivco.Models
 {
     public class Ingredients
     {
+
+
+        [Required]
         public string idIngredient { get; set; }
         public string strIngredient { get; set; }
 
