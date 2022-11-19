@@ -10,11 +10,11 @@ using System.ComponentModel;
 
 namespace Derivco
 {
-    public class UnitTest1
+    public class APITesting
     {
         private readonly ITestOutputHelper _output;
 
-        public UnitTest1(ITestOutputHelper output)
+        public APITesting(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -43,6 +43,7 @@ namespace Derivco
 
         [Fact]
 
+        //ingredient is non-alcoholic, Alcohol is null and ABV is null
         public async Task GetIngredientSearch()
         {
 
@@ -58,11 +59,36 @@ namespace Derivco
             var request = new RestRequest("api/json/v1/1/search.php/");
             request.AddQueryParameter("i", "vodka");
 
+            //All are alcohol yes so the test is going to fail 
             var response = await client.GetAsync<Ingredients>(request);
-            response?.Alcohol.Should().BeNull();
-            response?.ABV.Should().NotBeNull();
+            response?.strIngredient.Should().Equals("non-alcoholic");
+            response?.strAlcohol.Should().BeNull();
+            response?.strABV.Should().NotBeNull();
         }
 
+        [Fact]
+        //Alcoholic 
+        public async Task GetIngredientAlcoholic()
+        {
+
+            var restClientOptions = new RestClientOptions
+            {
+                BaseUrl = new Uri("https://www.thecocktaildb.com/"),
+                RemoteCertificateValidationCallback = (Sender, certificate, chain, errors) => true
+            };
+            // Rest Client initialization
+            var client = new RestClient(restClientOptions);
+            //Rest Request
+
+            var request = new RestRequest("api/json/v1/1/search.php/");
+            request.AddQueryParameter("i", "vodka");
+
+            //All are alcohol yes so the test is going to fail 
+            var response = await client.GetAsync<Ingredients>(request);
+            
+            response?.strAlcohol.Should().Be("Yes");
+            response?.strABV.Should().NotBeNull();
+        }
 
 
         // The below Test Case Searching for a cocktail by name is case-insensitive
@@ -88,7 +114,7 @@ namespace Derivco
             var response = await client.GetAsync<Ingredients>(request);
 
             // Below is the assertion for the Name to be in case Sensitive
-            response?.Alcohol.Should().NotBeUpperCased("margarita");
+            response?.strAlcohol.Should().NotBeUpperCased("margarita");
            
 
         }
@@ -109,8 +135,8 @@ namespace Derivco
             request.AddQueryParameter("s", "margarita");
 
             var response = await client.GetAsync<Ingredients>(request);
-            response?.Alcohol.Should().BeNull();
-            response?.ABV.Should().NotBeNull();
+            response?.strAlcohol.Should().BeNull();
+            response?.strABV.Should().NotBeNull();
         }
         [Fact]
         public async Task SeacrhByCockTailName()
