@@ -1,18 +1,8 @@
 using Derivco.Models;
 using FluentAssertions;
-using FluentResults;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using NUnit.Framework;
 using RestSharp;
-using System.Net;
-
-using Xunit;
 using Xunit.Abstractions;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
-using System.Text;
 
 namespace Derivco
 {
