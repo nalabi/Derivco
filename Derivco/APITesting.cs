@@ -158,7 +158,14 @@ namespace Derivco
 
         }
 
-     
+        [Fact]
+        [TestCase("Testing Exceptions")]
+        public async Task RestRequest_Fail_On_Exception()
+        {
+            var req = new RestRequest("nonexisting");
+            var client = new RestClient(new RestClientOptions("https://www.thecocktaildb.coam/") { ThrowOnAnyError = true });
+            await Xunit.Assert.ThrowsAsync<HttpRequestException>(() => client.ExecuteAsync(req));
+        }
 
     }
 
